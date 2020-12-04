@@ -43,9 +43,6 @@ jobs:
             prerelease: false
 
       - name: "Set next development version"
-        uses: actions/setup-node@v1.4.4
-        with:
-          node-version: 14
       - run: npm version --no-git-tag-version preminor --preid alpha
       - name: "Push next development vertion to master"
         uses: stefanzweifel/git-auto-commit-action@v4
