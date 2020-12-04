@@ -6,7 +6,7 @@ on:
       - release/*
 
 jobs:
-  build:
+  generate_release:
     runs-on: ubuntu-20.04
     steps:
       - name: Inject slug/short variables
@@ -35,19 +35,19 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            tag_name: "${{ env.GITHUB_REF_SLUG }}"
             release_name: Release ${{ env.GITHUB_REF_SLUG }}
             body: |
               Changes in this Release
             draft: false
             prerelease: false
+            tag_name: "v$(echo ${{ env.GITHUB_REF_SLUG }} | cut -d'-' -f 2)"
 
       - name: "Set next development version"
         uses: actions/setup-node@v1.4.4
         with:
           node-version: 14
       - run: npm version --no-git-tag-version preminor --preid alpha
-      - name: "Push next development vertion to master"
+      - name: "Push next development version to master"
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Set next development version"
